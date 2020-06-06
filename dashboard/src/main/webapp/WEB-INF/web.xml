@@ -5,4 +5,21 @@
          version="4.0">
     <display-name>Archetype Created Web Application</display-name>
 
+    <listener>
+        <listener-class>com.alexmanwell.impvocabapp.servlet.ContextListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>printAllWords</servlet-name>
+        <servlet-class>com.alexmanwell.impvocabapp.servlet.PrintAllWordsServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>printAllWords</servlet-name>
+        <url-pattern>/printAllWords</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>/index.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>
