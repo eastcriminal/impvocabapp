@@ -5,11 +5,11 @@ CREATE TABLE part_of_speech(
 );
 
 CREATE TABLE words(
-  id            SERIAl,
+  id            SERIAl PRIMARY KEY,
   name          CHARACTER VARYING(255) NOT NULL,
   transcription CHARACTER VARYING(255),
   explanation   CHARACTER VARYING(255),
   part_id       INTEGER,
-  PRIMARY KEY (name, explanation, part_id),
+  UNIQUE (name, explanation, part_id),
   FOREIGN KEY (part_id) REFERENCES part_of_speech (id)
 );
