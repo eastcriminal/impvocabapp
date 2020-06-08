@@ -21,6 +21,7 @@
                     <th scope="col">name</th>
                     <th scope="col">transcription</th>
                     <th scope="col">explanation</th>
+                    <th scope="col">examples</th>
                     <th scope="col">part of speech</th>
                 </tr>
                 </thead>
@@ -29,7 +30,12 @@
                     <tr>
                         <th scope="row" class="text-left">${word.name}</th>
                         <td class="text-center">${word.transcription}</td>
-                        <td class="text-right">${word.explanation}</td>
+                        <td class="text-right">${word.explanation.explanation}</td>
+                        <td class="text-right">
+                            <c:forEach items="${word.explanation.examples}" var="example">
+                                ${example}
+                            </c:forEach>
+                        </td>
                         <td class="text-right">${word.partOfSpeech}</td>
                     </tr>
                 </c:forEach>

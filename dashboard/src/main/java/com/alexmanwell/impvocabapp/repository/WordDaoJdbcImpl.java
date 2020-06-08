@@ -1,5 +1,7 @@
 package com.alexmanwell.impvocabapp.repository;
 
+import com.alexmanwell.impvocabapp.model.Explanation;
+import com.alexmanwell.impvocabapp.model.PartOfSpeech;
 import com.alexmanwell.impvocabapp.model.Word;
 
 import java.sql.Connection;
@@ -31,8 +33,8 @@ public class WordDaoJdbcImpl implements WordDao {
                         rs.getInt("wid"),
                         rs.getString("name"),
                         rs.getString("transcription"),
-                        rs.getString("explanation"),
-                        rs.getString("part_of_speech")
+                        new Explanation(rs.getString("explanation")),
+                        PartOfSpeech.valueOf((rs.getString("part_of_speech")).toUpperCase())
                 );
                 words.add(word);
             }
