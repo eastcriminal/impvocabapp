@@ -18,24 +18,29 @@
             <table class="table table-bordered col-12">
                 <thead>
                 <tr>
-                    <th scope="col">name</th>
-                    <th scope="col">transcription</th>
-                    <th scope="col">explanation</th>
-                    <th scope="col">examples</th>
-                    <th scope="col">part of speech</th>
+                    <th rowspan="2" scope="col">name</th>
+                    <th rowspan="2" scope="col">transcription</th>
+                    <th colspan="2"></th>
+                    <th rowspan="2" scope="col">part of speech</th>
+                </tr>
+                <tr>
+                    <td scope="col">explanation</td>
+                    <td scope="col">examples</td>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach items="${words}" var="word">
                     <tr>
-                        <th scope="row" class="text-left">${word.name}</th>
+                        <td scope="row" class="text-left">${word.name}</td>
                         <td class="text-center">${word.transcription}</td>
-                        <td class="text-right">${word.explanation.explanation}</td>
-                        <td class="text-right">
-                            <c:forEach items="${word.explanation.examples}" var="example">
-                                ${example}
+                        <td colspan="2">
+                            <c:forEach items="${word.explanation}" var="expl">
+                                <p class="text-left">${expl.explanation}</p>
+                                <c:forEach items="${expl.examples}" var="example">
+                                    <p class="text-right">${example.text}</p>
+                                </c:forEach>
                             </c:forEach>
-                        </td>
+                        </td class="text-right">
                         <td class="text-right">${word.partOfSpeech}</td>
                     </tr>
                 </c:forEach>
