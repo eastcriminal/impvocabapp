@@ -8,4 +8,6 @@ import java.util.Collection;
 public interface WordDao {
 
     Collection<Word> printAll() throws SQLException;
+
+    Collection<Word> findWordsByName(final String name) throws SQLException;
 }

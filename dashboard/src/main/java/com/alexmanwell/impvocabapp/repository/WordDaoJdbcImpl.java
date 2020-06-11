@@ -19,18 +19,36 @@ public class WordDaoJdbcImpl implements WordDao {
         this.connection = connection;
     }
 
+    private static final String SELECT_ALL_WORDS = "SELECT w.id AS wid, w.name, w.transcription, pos.name AS part_of_speech, " +
+            "expl.id AS expl_id, expl.name AS explain, example.name AS example " +
+            "FROM words AS w " +
+            "INNER JOIN part_of_speech AS pos ON w.part_id = pos.id " +
+            "INNER JOIN explanation AS expl ON w.id = expl.word_id " +
+            "INNER JOIN example ON expl.id = example.expl_id";
+
     @Override
     public Collection<Word> printAll() throws SQLException {
+        final Collection<Word> words;
+        try (PreparedStatement ps = connection.prepareStatement(SELECT_ALL_WORDS)) {
+            words = getWordsExecuteQuery(ps);
+        }
+        return Collections.unmodifiableCollection(words);
+    }
+
+    @Override
+    public Collection<Word> findWordsByName(final String name) throws SQLException {
+        Collection<Word> words;
+        final String SELECT_WORDS_BY_NAME = SELECT_ALL_WORDS + " WHERE w.name = ?;";
+        try (PreparedStatement ps = connection.prepareStatement(SELECT_WORDS_BY_NAME)) {
+            ps.setString(1, name);
+            words = getWordsExecuteQuery(ps);
+        }
+        return words;
+    }
+
+    private Collection<Word> getWordsExecuteQuery(final PreparedStatement ps) throws SQLException {
         Collection<Word> words = new HashSet<>();
-        final String SELECT_ALL_WORDS =
-                "SELECT w.id AS wid, w.name, w.transcription, pos.name AS part_of_speech, " +
-                        "expl.id AS expl_id, expl.name AS explain, example.name AS example " +
-                        "FROM words AS w " +
-                        "INNER JOIN part_of_speech AS pos ON w.part_id = pos.id " +
-                        "INNER JOIN explanation AS expl ON w.id = expl.word_id " +
-                        "INNER JOIN example ON expl.id = example.expl_id;";
-        try (PreparedStatement ps = connection.prepareStatement(SELECT_ALL_WORDS);
-             ResultSet rs = ps.executeQuery()) {
+        try (ResultSet rs = ps.executeQuery()) {
             Map<Integer, Collection<TextExample>> examples = new HashMap<>();
             Map<Map<Integer, Integer>, Explanation> explanations = new HashMap<>();
             Map<Integer, Collection<Explanation>> explanationsOfWord = new HashMap<>();
@@ -60,10 +78,9 @@ public class WordDaoJdbcImpl implements WordDao {
                 }
                 explainList.add(explanation);
                 explanationsOfWord.put(id, explainList);
-
                 words.add(new Word(id, name, transcription, explanationsOfWord.get(id), partOfSpeech));
             }
         }
-        return Collections.unmodifiableCollection(words);
+        return words;
     }
 }
