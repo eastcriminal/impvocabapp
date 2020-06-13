@@ -46,41 +46,108 @@ public class WordDaoJdbcImpl implements WordDao {
         return words;
     }
 
-    private Collection<Word> getWordsExecuteQuery(final PreparedStatement ps) throws SQLException {
-        Collection<Word> words = new HashSet<>();
-        try (ResultSet rs = ps.executeQuery()) {
-            Map<Integer, Collection<TextExample>> examples = new HashMap<>();
-            Map<Map<Integer, Integer>, Explanation> explanations = new HashMap<>();
-            Map<Integer, Collection<Explanation>> explanationsOfWord = new HashMap<>();
+    @Override
+    public Map<Word, Word> translate(final String name) throws SQLException {
+        final Map<Word, Word> words = new HashMap<>();
+        final String SELECT_TRANSLATE_WORDS_BY_NAME =
+                "SELECT w.id AS wid, w.name, w.transcription, pos.name AS part_of_speech, expl.id AS expl_id, " +
+                        "w2.id AS w2id, w2.name AS translate_name, expl.name AS explain, example.name AS example " +
+                        "FROM translate_word AS ts " +
+                        "INNER JOIN words AS w ON ts.from_id_word = w.id " +
+                        "INNER JOIN words AS w2 ON ts.to_id_word = w2.id " +
+                        "INNER JOIN part_of_speech AS pos ON w.part_id = pos.id " +
+                        "INNER JOIN explanation AS expl ON w.id = expl.word_id " +
+                        "INNER JOIN example ON expl.id = example.expl_id " +
+                        "WHERE w.name = ?";
+        try (PreparedStatement ps = connection.prepareStatement(SELECT_TRANSLATE_WORDS_BY_NAME)) {
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            final Map<Integer, Collection<TextExample>> examples = new HashMap<>();
+            final Map<Map<Integer, Integer>, Explanation> explanations = new HashMap<>();
+            final Map<Integer, Collection<Explanation>> explanationsOfWord = new HashMap<>();
             while (rs.next()) {
                 int id = rs.getInt("wid");
                 int explanationId = rs.getInt("expl_id");
-                PartOfSpeech partOfSpeech = PartOfSpeech.valueOf(rs.getString("part_of_speech").toUpperCase());
-                String transcription = rs.getString("transcription");
-                String name = rs.getString("name");
 
-                Collection<TextExample> examplesOfExplanation = examples.get(explanationId);
-                if (examplesOfExplanation == null) {
-                    examplesOfExplanation = new HashSet<>();
-                }
-                examplesOfExplanation.add(new TextExample(rs.getString("example")));
+                Collection<TextExample> examplesOfExplanation = addExampleToCollection(rs.getString("example"), examples.get(explanationId));
                 examples.put(explanationId, examplesOfExplanation);
 
-                Explanation explanation = explanations.get(Collections.singletonMap(id, explanationId));
-                if (explanation == null) {
-                    explanation = new Explanation(rs.getString("explain"), examples.get(explanationId));
-                }
+                Explanation explanation = addExamplesToExplanation(rs.getString("explain"), explanations.get(Collections.singletonMap(id, explanationId)), examples.get(explanationId));
                 explanations.put(Collections.singletonMap(id, explanationId), explanation);
 
-                Collection<Explanation> explainList = explanationsOfWord.get(id);
-                if (explainList == null) {
-                    explainList = new HashSet<>();
-                }
-                explainList.add(explanation);
-                explanationsOfWord.put(id, explainList);
-                words.add(new Word(id, name, transcription, explanationsOfWord.get(id), partOfSpeech));
+                Collection<Explanation> list = addExplanationToCollection(explanationsOfWord.get(id), explanation);
+                explanationsOfWord.put(id, list);
+
+                words.put(
+                        new Word(id,
+                                name,
+                                rs.getString("transcription"),
+                                explanationsOfWord.get(id),
+                                PartOfSpeech.valueOf(rs.getString("part_of_speech").toUpperCase())
+                        ),
+                        new Word(rs.getInt("w2id"),
+                                rs.getString("translate_name"),
+                                "",
+                                new ArrayList<>(),
+                                null)
+                );
             }
         }
         return words;
+    }
+
+    private Collection<Word> getWordsExecuteQuery(final PreparedStatement ps) throws SQLException {
+        Collection<Word> words = new HashSet<>();
+        try (ResultSet rs = ps.executeQuery()) {
+            final Map<Integer, Collection<TextExample>> examples = new HashMap<>();
+            final Map<Map<Integer, Integer>, Explanation> explanations = new HashMap<>();
+            final Map<Integer, Collection<Explanation>> explanationsOfWord = new HashMap<>();
+            while (rs.next()) {
+                int id = rs.getInt("wid");
+                int explanationId = rs.getInt("expl_id");
+
+                Collection<TextExample> examplesOfExplanation = addExampleToCollection(rs.getString("example"), examples.get(explanationId));
+                examples.put(explanationId, examplesOfExplanation);
+
+                Explanation explanation = addExamplesToExplanation(rs.getString("explain"), explanations.get(Collections.singletonMap(id, explanationId)), examples.get(explanationId));
+                explanations.put(Collections.singletonMap(id, explanationId), explanation);
+
+                Collection<Explanation> list = addExplanationToCollection(explanationsOfWord.get(id), explanation);
+                explanationsOfWord.put(id, list);
+
+                Word word = new Word(id,
+                                    rs.getString("name"),
+                                    rs.getString("transcription"),
+                                    explanationsOfWord.get(id),
+                                    PartOfSpeech.valueOf(rs.getString("part_of_speech").toUpperCase())
+                );
+                words.add(word);
+            }
+        }
+        return words;
+    }
+
+    private Collection<Explanation> addExplanationToCollection(Collection<Explanation> explanations, final Explanation explanation) {
+        if (explanations == null) {
+            explanations = new HashSet<>();
+        }
+        explanations.add(explanation);
+        return explanations;
+    }
+
+    private Explanation addExamplesToExplanation(final String explain, Explanation explanation, final Collection<TextExample> examples) {
+        if (explanation == null) {
+            explanation = new Explanation(explain, examples);
+        }
+        return explanation;
+    }
+
+    private Collection<TextExample> addExampleToCollection(final String example, Collection<TextExample> examples) {
+        if (examples == null) {
+            examples= new HashSet<>();
+        }
+        examples.add(new TextExample(example));
+        return examples;
     }
 }

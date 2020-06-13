@@ -26,3 +26,12 @@ CREATE TABLE example (
   name    CHARACTER VARYING(511) UNIQUE,
   FOREIGN KEY (expl_id) REFERENCES explanation (id)
 );
+
+CREATE TABLE translate_word (
+  id SERIAL PRIMARY KEY,
+  from_id_word INTEGER NOT NULL,
+  to_id_word INTEGER NOT NULL,
+  FOREIGN KEY (from_id_word) REFERENCES words (id),
+  FOREIGN KEY (to_id_word) REFERENCES words (id)
+);
+
