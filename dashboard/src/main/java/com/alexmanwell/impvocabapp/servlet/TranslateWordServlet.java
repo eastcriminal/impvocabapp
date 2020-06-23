@@ -30,13 +30,13 @@ public class TranslateWordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final String name = req.getParameter("name");
-        logger.info("translate unknown word: {}", name);
+        logger.debug("translate unknown word: {}", name);
         try {
             Map<Word, Word> words = wordDao.translate(name);
             req.setAttribute("words", words);
             req.getRequestDispatcher("/WEB-INF/views/printTranslateWordsByName.jsp").forward(req, resp);
         } catch (SQLException e) {
-            logger.debug("Failed connection in DataBase: {}", e);
+            logger.warn("Failed connection in DataBase: {}", e);
         }
     }
 
@@ -47,11 +47,7 @@ public class TranslateWordServlet extends HttpServlet {
 
     @Override
     public void init() {
-        try {
-            ServletContext context = getServletConfig().getServletContext();
-            wordDao = (WordDao) context.getAttribute("wordDao");
-        } catch (Exception e) {
-            logger.debug("Failed connection in DataBase: {}", e);
-        }
+        ServletContext context = getServletConfig().getServletContext();
+        wordDao = (WordDao) context.getAttribute("wordDao");
     }
 }

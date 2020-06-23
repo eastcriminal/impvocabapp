@@ -33,14 +33,14 @@ public class FindWordsByNameServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final String name = req.getParameter("name");
-        logger.info("find unknown word: {}", name);
+        logger.debug("find unknown word: {}", name);
         try {
             Collection<Word> wordsByName = wordDao.findWordsByName(name);
             Map<String, Collection<Word>> words = makeCollectionToMap(wordsByName);
             req.setAttribute("words", words);
             req.getRequestDispatcher("/WEB-INF/views/printWordsByName.jsp").forward(req, resp);
         } catch (SQLException e) {
-            logger.debug("Failed connection in DataBase: {}", e);
+            logger.warn("Failed connection in DataBase: {}", e);
         }
     }
 
@@ -65,11 +65,7 @@ public class FindWordsByNameServlet extends HttpServlet {
 
     @Override
     public void init() {
-        try {
-            ServletContext context = getServletConfig().getServletContext();
-            wordDao = (WordDao) context.getAttribute("wordDao");
-        } catch (Exception e) {
-            logger.debug("Failed connection in DataBase: {}", e);
-        }
+        ServletContext context = getServletConfig().getServletContext();
+        wordDao = (WordDao) context.getAttribute("wordDao");
     }
 }

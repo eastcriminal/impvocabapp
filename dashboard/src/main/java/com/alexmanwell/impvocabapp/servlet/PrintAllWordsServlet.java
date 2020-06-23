@@ -27,7 +27,7 @@ public class PrintAllWordsServlet extends HttpServlet {
             req.setAttribute("words", words);
             req.getRequestDispatcher("/WEB-INF/views/printAllWords.jsp").forward(req, resp);
         } catch (SQLException e) {
-            logger.debug("Failed conecction in DataBase: {}", e);
+            logger.warn("Failed conecction in DataBase: {}", e);
         }
     }
 
@@ -38,11 +38,7 @@ public class PrintAllWordsServlet extends HttpServlet {
 
     @Override
     public void init() {
-        try {
-            ServletContext context = getServletConfig().getServletContext();
-            wordDao = (WordDao) context.getAttribute("wordDao");
-        } catch (Exception e) {
-            logger.debug("Failed conecction in DataBase: {}", e);
-        }
+        ServletContext context = getServletConfig().getServletContext();
+        wordDao = (WordDao) context.getAttribute("wordDao");
     }
 }
