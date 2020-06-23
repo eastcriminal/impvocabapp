@@ -4,9 +4,9 @@
              type="java.util.Collection<com.alexmanwell.impvocabapp.model.Word>"/>
 <html>
 <head>
-    <jsp:include page="../views/fragments/immutableHead.jsp" flush="true"/>
+    <jsp:include page="fragments/header.jsp" flush="true"/>
 
-    <title>Print Words By Name</title>
+    <title>Print All Words</title>
 </head>
 <body>
 <main role="main" class="main container">

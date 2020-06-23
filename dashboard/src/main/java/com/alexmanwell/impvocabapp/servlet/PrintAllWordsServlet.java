@@ -16,7 +16,7 @@ import java.util.Collection;
 
 public class PrintAllWordsServlet extends HttpServlet {
 
-    final static Logger logger = LogManager.getLogger(PrintAllWordsServlet.class);
+    private final static Logger logger = LogManager.getLogger(PrintAllWordsServlet.class);
 
     private WordDao wordDao;
 
@@ -25,9 +25,9 @@ public class PrintAllWordsServlet extends HttpServlet {
         try {
             Collection<Word> words = wordDao.printAll();
             req.setAttribute("words", words);
-            req.getRequestDispatcher("/WEB-INF/views/printAllWords.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/allWords.jsp").forward(req, resp);
         } catch (SQLException e) {
-            logger.warn("Failed conecction in DataBase: {}", e);
+            logger.warn("Failed connection in DataBase: {}", e);
         }
     }
 

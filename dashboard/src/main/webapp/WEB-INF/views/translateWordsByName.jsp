@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <jsp:include page="../views/fragments/immutableHead.jsp" flush="true"/>
+    <jsp:include page="fragments/header.jsp" flush="true"/>
 
     <title>Translate Unknown Words By Name</title>
 </head>
@@ -25,6 +25,8 @@
             </form>
         </div>
     </div>
+
+    <jsp:include page="fragments/translatedWordsByName.jsp" flush="true"/>
 </main>
 </body>
 </html>

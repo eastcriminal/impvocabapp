@@ -38,7 +38,7 @@ public class FindWordsByNameServlet extends HttpServlet {
             Collection<Word> wordsByName = wordDao.findWordsByName(name);
             Map<String, Collection<Word>> words = makeCollectionToMap(wordsByName);
             req.setAttribute("words", words);
-            req.getRequestDispatcher("/WEB-INF/views/printWordsByName.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/findWordsByName.jsp").forward(req, resp);
         } catch (SQLException e) {
             logger.warn("Failed connection in DataBase: {}", e);
         }

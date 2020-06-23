@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 <head>
-    <jsp:include page="../views/fragments/immutableHead.jsp" flush="true"/>
+    <jsp:include page="fragments/header.jsp" flush="true"/>
 
     <title>Find Unknown Words By Name</title>
 </head>
@@ -25,6 +26,8 @@
             </form>
         </div>
     </div>
+
+    <jsp:include page="fragments/foundWordsByName.jsp" flush="true"/>
 </main>
 </body>
 </html>

@@ -2,17 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:useBean id="words" scope="request"
              type="java.util.Map<java.lang.String, java.util.Collection<com.alexmanwell.impvocabapp.model.Word>>"/>
-<html>
-<head>
-    <jsp:include page="../views/fragments/immutableHead.jsp" flush="true"/>
 
-    <title>Print All Learning Words</title>
-</head>
-<body>
-<main role="main" class="main container">
-    <div class="row">
-        <div class="col-lg">
-            <c:forEach items="${words}" var="word">
+<div class="row">
+    <div class="col-lg">
+        <c:forEach items="${words}" var="word">
             <h3 class="text-center">Word: ${word.key}</h3>
             <table class="table table-bordered col-12">
                 <thead>
@@ -43,9 +36,6 @@
                 </c:forEach>
                 </tbody>
             </table>
-            </c:forEach>
-        </div>
+        </c:forEach>
     </div>
-</main>
-</body>
-</html>
+</div>

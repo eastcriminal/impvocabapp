@@ -34,7 +34,7 @@ public class TranslateWordServlet extends HttpServlet {
         try {
             Map<Word, Word> words = wordDao.translate(name);
             req.setAttribute("words", words);
-            req.getRequestDispatcher("/WEB-INF/views/printTranslateWordsByName.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/translateWordsByName.jsp").forward(req, resp);
         } catch (SQLException e) {
             logger.warn("Failed connection in DataBase: {}", e);
         }
