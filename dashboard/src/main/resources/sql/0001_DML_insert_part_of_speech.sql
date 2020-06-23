@@ -1,9 +1,9 @@
-INSERT INTO part_of_speech(name, explanation) VALUES ('verb', 'action or state');
-INSERT INTO part_of_speech(name, explanation) VALUES ('noun', 'thing or person');
-INSERT INTO part_of_speech(name, explanation) VALUES ('adjective', 'describes a noun');
-INSERT INTO part_of_speech(name, explanation) VALUES ('determiner', 'limits or determines a noun');
-INSERT INTO part_of_speech(name, explanation) VALUES ('adverb', 'describes a verb, adjective or adverb');
-INSERT INTO part_of_speech(name, explanation) VALUES ('pronoun', 'replaces a noun');
-INSERT INTO part_of_speech(name, explanation) VALUES ('preposition', 'links a noun to another word');
-INSERT INTO part_of_speech(name, explanation) VALUES ('conjunction', 'joins clauses or sentences or words');
-INSERT INTO part_of_speech(name, explanation) VALUES ('interjection', 'short exclamation, sometimes inserted into a sentence');
+INSERT INTO part_of_speech(abbr, name) VALUES ('v', 'verb');
+INSERT INTO part_of_speech(abbr, name) VALUES ('n', 'noun');
+INSERT INTO part_of_speech(abbr, name) VALUES ('adj', 'adjective');
+INSERT INTO part_of_speech(abbr, name) VALUES ('deter', 'determine');
+INSERT INTO part_of_speech(abbr, name) VALUES ('adv', 'adverb');
+INSERT INTO part_of_speech(abbr, name) VALUES ('pron', 'pronoun');
+INSERT INTO part_of_speech(abbr, name) VALUES ('prep', 'preposition');
+INSERT INTO part_of_speech(abbr, name) VALUES ('conj', 'conjunction');
+INSERT INTO part_of_speech(abbr, name) VALUES ('inter', 'interjection');

@@ -1,37 +1,36 @@
 CREATE TABLE part_of_speech (
-  id          SERIAl PRIMARY KEY,
-  name        CHARACTER VARYING(30) UNIQUE  NOT NULL,
-  explanation CHARACTER VARYING(255) UNIQUE NOT NULL
+  abbr        CHARACTER VARYING(30) PRIMARY KEY,
+  name CHARACTER VARYING(255) NOT NULL
 );
 
 CREATE TABLE words (
   id            SERIAl PRIMARY KEY,
   name          CHARACTER VARYING(255) NOT NULL,
   transcription CHARACTER VARYING(255),
-  part_id INTEGER,
-  UNIQUE (name, transcription, part_id),
-  FOREIGN KEY (part_id) REFERENCES part_of_speech (id)
+  abbr CHARACTER VARYING(10),
+  UNIQUE (name, transcription, abbr),
+  FOREIGN KEY (abbr) REFERENCES part_of_speech (abbr)
 );
 
-CREATE TABLE explanation (
+CREATE TABLE explanations (
   id   SERIAL PRIMARY KEY,
   name CHARACTER VARYING(255),
   word_id INTEGER NOT NULL,
   FOREIGN KEY (word_id) REFERENCES words (id)
 );
 
-CREATE TABLE example (
+CREATE TABLE examples (
   id      SERIAL PRIMARY KEY,
   expl_id INTEGER,
   name    CHARACTER VARYING(511) UNIQUE,
-  FOREIGN KEY (expl_id) REFERENCES explanation (id)
+  FOREIGN KEY (expl_id) REFERENCES explanations (id)
 );
 
-CREATE TABLE translate_word (
+CREATE TABLE translations (
   id SERIAL PRIMARY KEY,
-  from_id_word INTEGER NOT NULL,
-  to_id_word INTEGER NOT NULL,
-  FOREIGN KEY (from_id_word) REFERENCES words (id),
-  FOREIGN KEY (to_id_word) REFERENCES words (id)
+  word_id INTEGER NOT NULL,
+  translate_word_id INTEGER NOT NULL,
+  FOREIGN KEY (word_id) REFERENCES words (id),
+  FOREIGN KEY (translate_word_id) REFERENCES words (id)
 );
 

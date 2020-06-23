@@ -20,11 +20,11 @@ public class WordDaoJdbcImpl implements WordDao {
     }
 
     private static final String SELECT_ALL_WORDS = "SELECT w.id AS wid, w.name, w.transcription, pos.name AS part_of_speech, " +
-            "expl.id AS expl_id, expl.name AS explain, example.name AS example " +
+            "expl.id AS expl_id, expl.name AS explain, examples.name AS example " +
             "FROM words AS w " +
-            "INNER JOIN part_of_speech AS pos ON w.part_id = pos.id " +
-            "INNER JOIN explanation AS expl ON w.id = expl.word_id " +
-            "INNER JOIN example ON expl.id = example.expl_id";
+            "INNER JOIN part_of_speech AS pos ON w.abbr = pos.abbr " +
+            "INNER JOIN explanations AS expl ON w.id = expl.word_id " +
+            "INNER JOIN examples ON expl.id = examples.expl_id";
 
     @Override
     public Collection<Word> printAll() throws SQLException {
@@ -51,13 +51,13 @@ public class WordDaoJdbcImpl implements WordDao {
         final Map<Word, Word> words = new HashMap<>();
         final String SELECT_TRANSLATE_WORDS_BY_NAME =
                 "SELECT w.id AS wid, w.name, w.transcription, pos.name AS part_of_speech, expl.id AS expl_id, " +
-                        "w2.id AS w2id, w2.name AS translate_name, expl.name AS explain, example.name AS example " +
-                        "FROM translate_word AS ts " +
-                        "INNER JOIN words AS w ON ts.from_id_word = w.id " +
-                        "INNER JOIN words AS w2 ON ts.to_id_word = w2.id " +
-                        "INNER JOIN part_of_speech AS pos ON w.part_id = pos.id " +
-                        "INNER JOIN explanation AS expl ON w.id = expl.word_id " +
-                        "INNER JOIN example ON expl.id = example.expl_id " +
+                        "w2.id AS w2id, w2.name AS translate_name, expl.name AS explain, examples.name AS example " +
+                        "FROM translations AS ts " +
+                        "INNER JOIN words AS w ON ts.word_id = w.id " +
+                        "INNER JOIN words AS w2 ON ts.translate_word_id = w2.id " +
+                        "INNER JOIN part_of_speech AS pos ON w.abbr = pos.abbr " +
+                        "INNER JOIN explanations AS expl ON w.id = expl.word_id " +
+                        "INNER JOIN examples ON expl.id = examples.expl_id " +
                         "WHERE w.name = ?";
         try (PreparedStatement ps = connection.prepareStatement(SELECT_TRANSLATE_WORDS_BY_NAME)) {
             ps.setString(1, name);
