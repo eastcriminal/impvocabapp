@@ -13,10 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @WebServlet("/findWordsByName")
 public class FindWordsByNameServlet extends HttpServlet {
@@ -36,26 +34,12 @@ public class FindWordsByNameServlet extends HttpServlet {
         logger.debug("find unknown word: {}", name);
         try {
             Collection<Word> wordsByName = wordDao.findWordsByName(name);
-            Map<String, Collection<Word>> words = makeCollectionToMap(wordsByName);
+            Map<String, List<Word>> words = wordsByName.stream().collect(Collectors.groupingBy(Word::getName));
             req.setAttribute("words", words);
             req.getRequestDispatcher("/WEB-INF/views/findWordsByName.jsp").forward(req, resp);
         } catch (SQLException e) {
             logger.warn("Failed connection in DataBase: {}", e);
         }
-    }
-
-    private Map<String, Collection<Word>> makeCollectionToMap(final Collection<Word> wordsByName) {
-        Map<String, Collection<Word>> result = new HashMap<>();
-        for (Word word : wordsByName) {
-            String name = word.getName();
-            Collection<Word> words = result.get(name);
-            if (words == null) {
-                words = new ArrayList<>();
-            }
-            words.add(word);
-            result.put(name, words);
-        }
-        return result;
     }
 
     @Override
