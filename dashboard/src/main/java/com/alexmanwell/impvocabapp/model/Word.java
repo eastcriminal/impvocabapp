@@ -12,6 +12,10 @@ public class Word {
     private final Collection<Explanation> explanations;
     private final PartOfSpeech partOfSpeech;
 
+    public Word(int id, String name, Collection<Explanation> explanations) {
+        this(id, name, "", explanations, null);
+    }
+
     public Word(int id, String name, String transcription, Collection<Explanation> explanations, PartOfSpeech partOfSpeech) {
         this.id = id;
         this.name = name;

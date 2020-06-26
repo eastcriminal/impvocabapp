@@ -1,5 +1,6 @@
 package com.alexmanwell.impvocabapp.servlet;
 
+import com.alexmanwell.impvocabapp.model.User;
 import com.alexmanwell.impvocabapp.model.Word;
 import com.alexmanwell.impvocabapp.repository.WordDao;
 import org.apache.logging.log4j.LogManager;
@@ -11,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
@@ -24,6 +26,8 @@ public class TranslateWordServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(true);
+        session.setAttribute("user", new User("alex", "alex@mail"));
         req.getRequestDispatcher("/WEB-INF/views/translateWordsByName.jsp").forward(req, resp);
     }
 

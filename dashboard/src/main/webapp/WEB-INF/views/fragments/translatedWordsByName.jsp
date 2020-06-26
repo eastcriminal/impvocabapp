@@ -21,23 +21,38 @@
             </thead>
             <tbody>
             <c:forEach items="${words}" var="word">
-
                 <tr>
                     <td class="text-right">${word.key.name}</td>
                     <td class="text-right">${word.key.partOfSpeech}</td>
                     <td class="text-center">${word.key.transcription}</td>
                     <td colspan="2">
                         <c:forEach items="${word.key.explanation}" var="expl">
-                            <p class="text-left">${expl.explanation}</p>
+                            <p>
+                                <span class="text-left">${expl.explanation}</span>
+                                <a href="" onclick="return false;" class="add-userWord-modal"
+                                   data-word-id="${word.key.id}"
+                                   data-word-name="${word.key.name}"
+                                   data-word-explanation="${expl.explanation}"
+                                   data-word-explanation-id="${expl.id}"
+                                   data-word-part-of-speech="${word.key.partOfSpeech}"
+
+                                   data-toggle="modal"
+                                   data-target="#addUserWordModal"><span class="text-right">add</span>
+                                </a>
+                            </p>
                             <c:forEach items="${expl.examples}" var="example">
                                 <p class="text-right">${example.text}</p>
                             </c:forEach>
                         </c:forEach>
                     </td class="text-right">
                     <td class="text-right">${word.value.name}</td>
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
     </div>
 </div>
+
+<script src="${pageContext.request.contextPath}/resources/js/addUserWord.js"></script>
+<jsp:include page="addUserWordModalWindow.jsp"/>

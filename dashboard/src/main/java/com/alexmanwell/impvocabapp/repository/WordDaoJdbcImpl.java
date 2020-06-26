@@ -73,7 +73,7 @@ public class WordDaoJdbcImpl implements WordDao {
                 Collection<TextExample> examplesOfExplanation = addExampleToCollection(rs.getString("example"), examples.get(explanationId));
                 examples.put(explanationId, examplesOfExplanation);
 
-                Explanation explanation = addExamplesToExplanation(rs.getString("explain"), explanations.get(Collections.singletonMap(id, explanationId)), examples.get(explanationId));
+                Explanation explanation = addExamplesToExplanation(explanationId, rs.getString("explain"), explanations.get(Collections.singletonMap(id, explanationId)), examples.get(explanationId));
                 explanations.put(Collections.singletonMap(id, explanationId), explanation);
 
                 Collection<Explanation> list = addExplanationToCollection(explanationsOfWord.get(id), explanation);
@@ -110,7 +110,7 @@ public class WordDaoJdbcImpl implements WordDao {
                 Collection<TextExample> examplesOfExplanation = addExampleToCollection(rs.getString("example"), examples.get(explanationId));
                 examples.put(explanationId, examplesOfExplanation);
 
-                Explanation explanation = addExamplesToExplanation(rs.getString("explain"), explanations.get(Collections.singletonMap(id, explanationId)), examples.get(explanationId));
+                Explanation explanation = addExamplesToExplanation(explanationId, rs.getString("explain"), explanations.get(Collections.singletonMap(id, explanationId)), examples.get(explanationId));
                 explanations.put(Collections.singletonMap(id, explanationId), explanation);
 
                 Collection<Explanation> list = addExplanationToCollection(explanationsOfWord.get(id), explanation);
@@ -136,9 +136,9 @@ public class WordDaoJdbcImpl implements WordDao {
         return explanations;
     }
 
-    private Explanation addExamplesToExplanation(final String explain, Explanation explanation, final Collection<TextExample> examples) {
+    private Explanation addExamplesToExplanation(int id, final String explain, Explanation explanation, final Collection<TextExample> examples) {
         if (explanation == null) {
-            explanation = new Explanation(explain, examples);
+            explanation = new Explanation(id, explain, examples);
         }
         return explanation;
     }

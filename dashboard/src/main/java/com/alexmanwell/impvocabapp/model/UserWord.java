@@ -1,17 +1,19 @@
 package com.alexmanwell.impvocabapp.model;
 
+import java.util.Collection;
+
 public class UserWord {
 
     private final int id;
     private final User user;
     private final Word word;
-    private final TextExample example;
+    private final Collection<TextExample> examples;
 
-    public UserWord(int id, User user, Word word, TextExample example) {
+    public UserWord(int id, User user, Word word, Collection<TextExample> examples) {
         this.id = id;
         this.user = user;
         this.word = word;
-        this.example = example;
+        this.examples = examples;
     }
 
     public int getId() {
@@ -26,7 +28,7 @@ public class UserWord {
         return word;
     }
 
-    public TextExample getExample() {
-        return example;
+    public Collection<TextExample> getExamples() {
+        return examples;
     }
 }
